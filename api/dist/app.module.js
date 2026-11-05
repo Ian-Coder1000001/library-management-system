@@ -4,22 +4,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { Module } from '@nestjs/common';
-import { createObserveModule } from '@nestjs/observe';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
-export const { ObserveModule, ObserveInstrument } = createObserveModule();
+import { Module } from "@nestjs/common";
+import { AppController } from "./app.controller.js";
+import { AppService } from "./app.service.js";
+import { PrismaModule } from "./prisma/prisma.module.js";
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     Module({
-        imports: [
-            ObserveModule.forRoot({
-                appKey: 'YOUR_APP_KEY',
-                appSecret: 'YOUR_APP_SECRET',
-                serviceId: 'api',
-            }),
-        ],
+        imports: [PrismaModule],
         controllers: [AppController],
         providers: [AppService],
     })
