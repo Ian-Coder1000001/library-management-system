@@ -1,4 +1,5 @@
 import { PrismaClient, Role } from "@prisma/client";
+import * as bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -64,16 +65,28 @@ async function main() {
     });
   }
 
-  // two users so there is someone to test with later
+  // test accounts (passwords are hashed, never saved as plain text)
+  const librarianHash = await bcrypt.hash("Librarian123!", 10);
+  const patronHash = await bcrypt.hash("Patron123!", 10);
+
   await prisma.user.upsert({
     where: { email: "librarian@example.com" },
-    update: {},
-    create: { email: "librarian@example.com", name: "Lena Librarian", role: Role.LIBRARIAN },
+    update: { passwordHash: librarianHash, role: Role.LIBRARIAN },
+    create: {
+      email: "librarian@example.com",
+      name: "Lena Librarian",
+      passwordHash: librarianHash,
+      role: Role.LIBRARIAN,
+    },
   });
   await prisma.user.upsert({
     where: { email: "patron@example.com" },
-    update: {},
-    create: { email: "patron@example.com", name: "Peter Patron" },
+    update: { passwordHash: patronHash },
+    create: {
+      email: "patron@example.com",
+      name: "Peter Patron",
+      passwordHash: patronHash,
+    },
   });
 
   console.log(`Seeded ${genres.length} genres, ${books.length} books and 2 users.`);
