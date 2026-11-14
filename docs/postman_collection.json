@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Library Management System API",
-    "description": "Run 'Login (librarian)' first. It saves the token, and the other requests use it automatically.",
+    "description": "Run 'Login (librarian)' first. It saves the token, and the other requests use it automatically. Login is limited to 5 attempts per minute.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -435,6 +435,28 @@
               "path": [
                 "books",
                 "20"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get my profile (needs token)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "profile"
               ]
             }
           }
