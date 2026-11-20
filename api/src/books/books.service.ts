@@ -12,7 +12,7 @@ import { UpdateBookDto } from "./dto/update-book.dto.js";
 export class BooksService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(genreId?: string, search?: string, page?: string, limit?: string) {
+  async findAll(genreId?: string, search?: string, page?: string, limit?: string, sort?: string) {
     // work out page and limit (page starts at 1, limit is between 1 and 50)
     const pageNumber = Math.max(Number(page) || 1, 1);
     const pageSize = Math.min(Math.max(Number(limit) || 10, 1), 50);
@@ -20,6 +20,8 @@ export class BooksService {
     if (genreId && isNaN(Number(genreId))) {
       throw new BadRequestException("genreId must be a number");
     }
+
+    const orderBy = sort === "author" ? { author: "asc" as const } : { title: "asc" as const };
 
     const where = {
       ...(genreId && { genreId: Number(genreId) }),
@@ -35,7 +37,7 @@ export class BooksService {
       this.prisma.book.findMany({
         where,
         include: { genre: true },
-        orderBy: { title: "asc" },
+        orderBy,
         skip: (pageNumber - 1) * pageSize,
         take: pageSize,
       }),

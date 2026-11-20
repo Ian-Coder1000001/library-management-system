@@ -27,8 +27,9 @@ export class BooksController {
     @Query("search") search?: string,
     @Query("page") page?: string,
     @Query("limit") limit?: string,
+    @Query("sort") sort?: string,
   ) {
-    return this.booksService.findAll(genreId, search, page, limit);
+    return this.booksService.findAll(genreId, search, page, limit, sort);
   }
 
   @Get(":id")
